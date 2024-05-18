@@ -6,11 +6,19 @@ import logo from '/public/uploads/logos/logo-top.png'
 
 let form = reactive({
     firstname: '',
+    lastname: '',
+    email: '',
+    password: '',
+    c_password: '',
 })
 
 
 let register = () => {
-    console.log('hello');
+    console.log('firstname', form.firstname);
+    console.log('lastname', form.lastname);
+    console.log('email', form.email);
+    console.log('password', form.password);
+    console.log('c_password', form.c_password);
 }
 
 </script>
@@ -26,23 +34,23 @@ let register = () => {
                     </div>
                     <div class="">
                         <label class="block font-noto font-semibold text-base text-[#00AAA1] mb-3" for="firstname">First Name</label>
-                        <input type="text" id="firstname" placeholder="First Name" class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
+                        <input type="text" v-model="form.firstname" id="firstname" placeholder="First Name" class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
                     </div>
                     <div class="">
                         <label class="block font-noto font-semibold text-base text-[#00AAA1] mb-3" for="lastname">Last Name</label>
-                        <input type="text" id="lastname" placeholder="Last Name" class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
+                        <input type="text" v-model="form.lastname" id="lastname" placeholder="Last Name" class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
                     </div>
                     <div class="">
                         <label class="block font-noto font-semibold text-base text-[#00AAA1] mb-3" for="email">Email Address</label>
-                        <input type="text" id="email" placeholder="Email Address" class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
+                        <input type="text" v-model="form.email" id="email" placeholder="Email Address" class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
                     </div>
                     <div class="">
                         <label class="block font-noto font-semibold text-base text-[#00AAA1] mb-3" for="password">Password</label>
-                        <input type="text" id="password" placeholder="Password" class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
+                        <input type="text" v-model="form.password" id="password" placeholder="Password" class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
                     </div>
                     <div class="">
                         <label class="block font-noto font-semibold text-base text-[#00AAA1] mb-3" for="c_password">Confirm Password</label>
-                        <input type="text" id="c_password" placeholder="Confirm Password" class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
+                        <input type="text" v-model="form.c_password" id="c_password" placeholder="Confirm Password" class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
                     </div>
                     <div class="my-7">
                        <button @click="register()" class="font-noto font-semibold text-base rounded-[5px] text-white bg-[#00AAA1] w-full lg:w-[500px] py-5">Click To Register</button>
