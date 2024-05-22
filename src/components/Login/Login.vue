@@ -1,16 +1,36 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import Container from '../Layouts/Container.vue'
 import Title from '../Layouts/Title.vue'
 import logo from '/public/uploads/logos/logo-top.png'
+import { useAuthorStore } from '@/store/author'
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
+let authStore = useAuthorStore();
 
 let form = reactive({
     email: '',
+    password: '',
+})
+
+watch(form, () => {
+    if (form.email) {
+        authStore.errors.email = ""
+    }
+    if (form.password) {
+        authStore.errors.password = ""
+    }
 })
 
 
-let login = () => {
-    console.log('hello');
+let login = async () => {
+    await authStore.login("http://127.0.0.1:8000/api/customer/login", form.email, form.password)
+    if (authStore.isAuthenticate) {
+        toast(authStore.successMsg.login, {
+            autoClose: 2000,
+        });
+    }
 }
 
 </script>
@@ -27,14 +47,20 @@ let login = () => {
                     <div class="">
                         <label class="block font-noto font-semibold text-base text-[#00AAA1] mb-3" for="email">Email
                             Address</label>
-                        <input type="text" id="email" placeholder="Email Address"
+                        <input type="email" v-model="form.email" id="email" placeholder="Email Address"
                             class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
+                        <p v-if="authStore.errors.email" class="mt-2 font-noto font-medium text-red-600 text-sm">
+                            {{
+                                authStore.errors.email }}</p>
                     </div>
                     <div class="">
                         <label class="block font-noto font-semibold text-base text-[#00AAA1] mb-3"
                             for="password">Password</label>
-                        <input type="text" id="password" placeholder="Password"
+                        <input type="password" v-model="form.password" id="password" placeholder="Password"
                             class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
+                        <p v-if="authStore.errors.password" class="mt-2 font-noto font-medium text-red-600 text-sm">
+                            {{
+                                authStore.errors.password }}</p>
                     </div>
                     <div class="my-7">
                         <button @click="login()"

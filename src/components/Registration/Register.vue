@@ -4,6 +4,8 @@ import Container from '../Layouts/Container.vue'
 import Title from '../Layouts/Title.vue'
 import logo from '/public/uploads/logos/logo-top.png'
 import { useAuthorStore } from '@/store/author'
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 let authStore = useAuthorStore()
 
@@ -17,8 +19,15 @@ let form = reactive({
     c_password: '',
 })
 
-let register = () => {
-    authStore.register("http://127.0.0.1:8000/api/customer/register", form.firstname, form.lastname, form.email, form.password)
+let register = async () => {
+    if (form.password == form.c_password) {
+        await authStore.register("http://127.0.0.1:8000/api/customer/register", form.firstname, form.lastname, form.email, form.password)
+        toast(authStore.successMsg.register, {
+            autoClose: 2000,
+        });
+    } else {
+        authStore.errors.password = "password confirmation doesn't match"
+    }
 
 }
 
@@ -44,9 +53,6 @@ watch(() => {
     <div class="pt-20 mx-5 xl:mx-0">
         <Container>
             <Title title="Registration" subtitle='Page' />
-            <div v-if="authStore.successMsg.register" class="flex justify-center items-center">
-                <p class="font-noto font-semibold text-2xl text-green-500">{{ authStore.successMsg.register }}</p>
-            </div>
             <form @submit.prevent class="flex justify-center">
                 <div class="flex flex-col xl:items-center gap-5 mt-10 xl:p-10 w-full xl:w-1/2 rounded-md xl:shadow-lg">
                     <div class="my-5">
@@ -73,7 +79,7 @@ watch(() => {
                     <div class="">
                         <label class="block font-noto font-semibold text-base text-[#00AAA1] mb-3" for="email">Email
                             Address</label>
-                        <input type="text" v-model="form.email" id="email" placeholder="Email Address"
+                        <input type="email" v-model="form.email" id="email" placeholder="Email Address"
                             class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
                         <p v-if="authStore.errors.email" class="mt-2 font-noto font-medium text-red-600 text-sm">
                             {{
@@ -82,7 +88,7 @@ watch(() => {
                     <div class="">
                         <label class="block font-noto font-semibold text-base text-[#00AAA1] mb-3"
                             for="password">Password</label>
-                        <input type="text" v-model="form.password" id="password" placeholder="Password"
+                        <input type="password" v-model="form.password" id="password" placeholder="Password"
                             class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
                         <p v-if="authStore.errors.password" class="mt-2 font-noto font-medium text-red-600 text-sm">
                             {{
@@ -91,7 +97,7 @@ watch(() => {
                     <div class="">
                         <label class="block font-noto font-semibold text-base text-[#00AAA1] mb-3"
                             for="c_password">Confirm Password</label>
-                        <input type="text" v-model="form.c_password" id="c_password" placeholder="Confirm Password"
+                        <input type="password" v-model="form.c_password" id="c_password" placeholder="Confirm Password"
                             class="border border-[#94D7D3] rounded-[5px] px-4 py-4 w-full lg:w-[500px] placeholder:font-noto placeholder:font-semibold placeholder:text-sm">
                     </div>
                     <div class="my-7">

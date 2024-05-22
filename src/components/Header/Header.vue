@@ -1,14 +1,25 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Container from '../Layouts/Container.vue';
 import Listitem from '../Layouts/Listitem.vue';
 import Pictures from '../Layouts/Pictures.vue';
 import LogoImg from '/public/uploads/logos/logo-top.png'
+import { useAuthorStore } from '@/store/author';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 let bar = ref(false)
+let authStore = useAuthorStore();
 
 let sideBar = () => {
     bar.value = !bar.value
+}
+
+let logout = async () => {
+    authStore.logout()
+    toast("Customer Logout Successfull", {
+        autoClose: 2000,
+    });
 }
 
 
@@ -37,8 +48,11 @@ let sideBar = () => {
                 <ul
                     class="flex gap-x-3 md:gap-x-7 lg:gap-x-11 lg:justify-end justify-between items-center font-noto font-semibold md:text-base text-sm text-[#333333]">
                     <li> <router-link to="/search/page"><i class="fa-solid fa-magnifying-glass"></i></router-link> </li>
-                    <li><i class="fa-solid fa-pen-to-square"></i></li>
-                    <Listitem title="Login/Register" href="/register" />
+                    <li v-if="authStore.isAuthenticate" @click="logout()" class="cursor-pointer"><i
+                            class="fa-solid fa-arrow-right-from-bracket"></i></li>
+                    <Listitem v-if="authStore.isAuthenticate"
+                        :title="authStore.authCustomer.firstname + ' ' + authStore.authCustomer.lastname" href="" />
+                    <Listitem v-else title="Login/Register" href="/register" />
                 </ul>
             </div>
             <div class="md:hidden w-1/4 mx-5 flex justify-end cursor-pointer">
