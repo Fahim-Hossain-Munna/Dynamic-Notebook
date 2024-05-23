@@ -2,6 +2,7 @@
 import { onMounted, reactive, ref, watch } from 'vue';
 import Container from '../Layouts/Container.vue';
 import SingleBlog from '../Layouts/SingleBlog.vue';
+import BlogGrid from '../Layouts/BlogGrid.vue'
 import axios from 'axios';
 
 import { useRoute } from 'vue-router';
@@ -12,6 +13,7 @@ let showperPage = 8
 let currentPage = 1
 let Allblogs = ref([])
 let blogs = ref([])
+let gridView = ref(false)
 
 onMounted(async () => {
     let response = await axios.get('http://127.0.0.1:8000/api/category/blogs/' + route.params.slug)
@@ -23,6 +25,12 @@ let onClickHandler = (page) => {
     blogs.value = Allblogs.value.slice((page - 1) * showperPage, showperPage * page);
 }
 
+let gridViewlist = () => {
+    gridView.value = false
+}
+let gridViewrow = () => {
+    gridView.value = true
+}
 
 </script>
 
@@ -31,7 +39,16 @@ let onClickHandler = (page) => {
     <div class="categoryBlog my-20 mx-5 xl:mx-0">
         <Container>
             <Title title="Category" subtitle="with blogs" />
-            <SingleBlog v-for="blog in blogs" :key="blog.id" :blog="blog" />
+            <div class="my-5 flex justify-end items-center gap-8 text-base">
+                <i @click="gridViewlist()" class="fa-solid fa-list p-3 border"></i>
+                <i @click="gridViewrow()" class="fa-solid fa-table-cells p-3 border"></i>
+            </div>
+            <div v-if="gridView">
+                <BlogGrid :blogs="blogs" />
+            </div>
+            <div v-else>
+                <SingleBlog v-for="blog in blogs" :key="blog.id" :blog="blog" />
+            </div>
             <vue-awesome-paginate v-if="blogs.length > 0" :total-items="Allblogs.length" :items-per-page="showperPage"
                 v-model="currentPage" :on-click="onClickHandler" :show-breakpoint-buttons="false" :max-pages-shown="3">
                 <template #prev-button>
